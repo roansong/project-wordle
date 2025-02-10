@@ -9,10 +9,7 @@ import GameOverBanner from "../GameOverBanner";
 import OnScreenKeyboard from "../OnScreenKeyboard";
 import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 
-// Pick a random word on every pageload.
-const answer = sample(WORDS);
-// To make debugging easier, we'll log the solution in the console.
-console.info({ answer });
+
 
 const INITIAL_LETTER_STATE = Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ").reduce(
   (map, letter) => {
@@ -22,25 +19,23 @@ const INITIAL_LETTER_STATE = Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ").reduce(
   {}
 );
 
+const INITIAL_GUESSES_STATE = range(NUM_OF_GUESSES_ALLOWED).map((_) => {
+  return {
+    guess: range(5).map((_) => {
+      return { letter: "" };
+    }),
+
+    id: crypto.randomUUID(),
+  };
+});
+
 function Game() {
-  const [guesses, setGuesses] = React.useState(
-    range(NUM_OF_GUESSES_ALLOWED).map((_) => {
-      return {
-        guess: range(5).map((_) => {
-          return { letter: "" };
-        }),
-
-        id: crypto.randomUUID(),
-      };
-    })
-  );
-
+  const [guesses, setGuesses] = React.useState(INITIAL_GUESSES_STATE);
   const [guess, setGuess] = React.useState("");
-
   const [letterState, setLetterState] = React.useState(INITIAL_LETTER_STATE);
-
   const [guessesUsed, setGuessesUsed] = React.useState(0);
   const [hasWon, setHasWon] = React.useState(false);
+  const [answer, setAnswer] = React.useState(() => sample(WORDS))
 
   const gameState =
     !hasWon && guessesUsed < NUM_OF_GUESSES_ALLOWED
@@ -55,14 +50,23 @@ function Game() {
     console.log({ guess });
     console.log(guess === answer);
     addGuess(guess);
-    setGuess('');
+    setGuess("");
+  }
+
+  function restartGame() {
+    setGuesses(INITIAL_GUESSES_STATE);
+    setGuess("");
+    setLetterState(INITIAL_LETTER_STATE);
+    setGuessesUsed(0);
+    setHasWon(false);
+    setAnswer(sample(WORDS));
   }
 
   function addLetter(letter) {
     if (guess.length >= 5) {
       return;
     }
-    setGuess(guess + letter)
+    setGuess(guess + letter);
   }
 
   function addGuess(guess) {
@@ -102,6 +106,7 @@ function Game() {
           guessesUsed={guessesUsed}
           gameState={gameState}
           answer={answer}
+          restartGame={restartGame}
         />
       )}
     </>
