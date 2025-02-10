@@ -5,6 +5,7 @@ import { checkGuess } from "../../game-helpers";
 import { WORDS } from "../../data";
 import GuessInput from "../GuessInput";
 import GuessResults from "../GuessResults";
+import GameOverBanner from "../GameOverBanner";
 import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 
 // Pick a random word on every pageload.
@@ -27,6 +28,15 @@ function Game() {
 
   const [guessesUsed, setGuessesUsed] = React.useState(0);
   const [hasWon, setHasWon] = React.useState(false);
+
+  const gameState =
+    !hasWon && guessesUsed < NUM_OF_GUESSES_ALLOWED
+      ? "in-progress"
+      : hasWon
+      ? "victory"
+      : "defeat";
+    
+  const gameOver = gameState !== "in-progress"
 
   function submitGuess(guess) {
     console.log({ guess });
@@ -53,6 +63,13 @@ function Game() {
         submitGuess={submitGuess}
         guessLimitReached={guessesUsed === NUM_OF_GUESSES_ALLOWED}
       />
+      {gameOver && (
+        <GameOverBanner
+          guessesUsed={guessesUsed}
+          gameState={gameState}
+          answer={answer}
+        />
+      )}
     </>
   );
 }
