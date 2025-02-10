@@ -140,6 +140,50 @@ h1 {
   color: white;
 }
 
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.key {
+  width: 100%;
+  border-radius: 0.25rem;
+  text-align: center;
+  background: rgb(233, 233, 233);
+  border: grey 1px solid;
+  color: rgb(69, 69, 69);
+  height: 2rem;
+  width: 2rem;
+}
+
+.key:hover {
+  background: rgb(195, 194, 194);
+}
+
+.key.correct {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+.key.incorrect {
+  background: var(--color-gray-300);
+  border-color: var(--color-gray-300);
+  color: white;
+}
+.key.misplaced {
+  background: var(--color-warning);
+  border-color: var(--color-warning);
+  color: white;
+}
+
 .guess-input-wrapper {
   display: flex;
   flex-direction: column;

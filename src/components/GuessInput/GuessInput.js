@@ -1,17 +1,15 @@
 import React from "react";
 
-function GuessInput({ submitGuess, guessLimitReached }) {
-  const [guess, setGuess] = React.useState("");
+function GuessInput({ submitGuess, guessLimitReached, guess, setGuess }) {
   function handleSubmit(event) {
     event.preventDefault();
-    submitGuess(guess);
-    setGuess("");
+    submitGuess();
   }
   return (
     <form className="guess-input-wrapper" onSubmit={handleSubmit}>
       <label htmlFor="guess-input">Enter guess:</label>
       <input
-        name="guess-input"
+        id="guess-input"
         type="text"
         value={guess}
         onChange={(event) => setGuess(event.target.value.toUpperCase())}
