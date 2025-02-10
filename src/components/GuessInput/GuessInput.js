@@ -1,6 +1,6 @@
 import React from "react";
 
-function GuessInput({ submitGuess }) {
+function GuessInput({ submitGuess, guessLimitReached }) {
   const [guess, setGuess] = React.useState("");
   function handleSubmit(event) {
     event.preventDefault();
@@ -17,6 +17,7 @@ function GuessInput({ submitGuess }) {
         onChange={(event) => setGuess(event.target.value.toUpperCase())}
         maxLength={5}
         pattern="\S{5}"
+        disabled={guessLimitReached}
       />
     </form>
   );
