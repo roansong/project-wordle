@@ -1,6 +1,7 @@
 import React from "react";
 
 import { sample, range } from "../../utils";
+import { checkGuess } from "../../game-helpers";
 import { WORDS } from "../../data";
 import GuessInput from "../GuessInput";
 import GuessResults from "../GuessResults";
@@ -14,10 +15,18 @@ console.info({ answer });
 function Game() {
   const [guesses, setGuesses] = React.useState(
     range(NUM_OF_GUESSES_ALLOWED).map((_) => {
-      return { guess: "     ", id: crypto.randomUUID() };
+      return {
+        guess: range(5).map((_) => {
+          return { letter: "" };
+        }),
+
+        id: crypto.randomUUID(),
+      };
     })
   );
+
   const [guessesUsed, setGuessesUsed] = React.useState(0);
+  const [hasWon, setHasWon] = React.useState(false);
 
   function submitGuess(guess) {
     console.log({ guess });
@@ -26,13 +35,17 @@ function Game() {
   }
 
   function addGuess(guess) {
-    const nextGuess = { ...guesses[guessesUsed], guess };
+    const result = checkGuess(guess, answer);
+    const nextGuess = {
+      ...guesses[guessesUsed],
+      guess: result,
+    };
     const nextGuesses = [...guesses];
     nextGuesses[guessesUsed] = nextGuess;
     setGuesses(nextGuesses);
     setGuessesUsed(guessesUsed + 1);
+    setHasWon(result.every(({ status }) => status === "correct"));
   }
-
   return (
     <>
       <GuessResults guesses={guesses} />

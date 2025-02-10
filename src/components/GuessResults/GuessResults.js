@@ -6,8 +6,8 @@ function GuessResults({ guesses }) {
       {guesses.length > 0 &&
         guesses.map(({ guess, id }) => (
           <p className="guess" key={id}>
-            {guess && Array.from(guess).map((letter, idx) => (
-              <span className="cell" key={`${idx}-${letter}`}>{letter}</span>
+            {guess && guess.map(({letter, status}, idx) => (
+              <span className={`cell ${status}`} key={`${idx}-${letter}`}>{letter}</span>
             ))}
           </p>
         ))}
